@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Churn Predictor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f2f2f2;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+    button:hover {
+      background-color: #45a049;
+      cursor: pointer;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Churn Prediction App</h2>
+
+    <!-- Upload CSV -->
+    <div class="section">
+      <form id="uploadForm">
+        <label>Upload CSV File:</label>
+        <input type="file" id="csvFile" name="file" required />
+        <label>Target Column:</label>
+        <input type="text" id="targetColumn" name="target_column" placeholder="e.g. Churn" required />
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+
+    <!-- Data Cleaning -->
+    <div class="section">
+      <form id="cleaningForm">
+        <label>Missing Value Handling:</label>
+        <select id="missing">
+          <option value="drop">Drop</option>
+          <option value="impute">Impute</option>
+        </select>
+        <label>Encoding Type:</label>
+        <select id="encode">
+          <option value="label">Label</option>
+          <option value="one-hot" selected>One-Hot</option>
+        </select>
+        <label>Scaling Type:</label>
+        <select id="scale">
+          <option value="standard">Standard</option>
+          <option value="min-max">Min-Max</option>
+        </select>
+        <button type="submit">Clean Data</button>
+      </form>
+    </div>
+
+    <!-- Model Training -->
+    <div class="section">
+      <form id="trainForm">
+        <label>Select Models (comma-separated):</label>
+        <input type="text" id="models" value="logistic,randomforest,xgboost" />
+        <label>Target Column (again):</label>
+        <input type="text" id="trainTarget" placeholder="e.g. Churn" required />
+        <button type="submit">Train Models</button>
+      </form>
+    </div>
+
+    <!-- Prediction -->
+    <div class="section">
+      <form id="predictForm">
+        <label>Upload Test CSV:</label>
+        <input type="file" id="testCsv" name="file" required />
+        <label>Model Name to Use:</label>
+        <input type="text" id="modelName" placeholder="e.g. logistic" required />
+        <label>Target Column (again):</label>
+        <input type="text" id="predictTarget" placeholder="e.g. Churn" required />
+        <button type="submit">Predict</button>
+      </form>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const backend = '';
+
+    document.getElementById('uploadForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('file', document.getElementById('csvFile').files[0]);
+      formData.append('target_column', document.getElementById('targetColumn').value);
+      const res = await fetch(`${backend}/upload`, { method: 'POST', body: formData });
+      const data = await res.json();
+      alert('Upload successful. Columns: ' + data.columns.join(', '));
+    };
+
+    document.getElementById('cleaningForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('missing', document.getElementById('missing').value);
+      formData.append('encode', document.getElementById('encode').value);
+      formData.append('scale', document.getElementById('scale').value);
+      const res = await fetch(`${backend}/data_cleaning`, { method: 'POST', body: formData });
+      const data = await res.json();
+      alert('Data cleaned. Preview logged to console.');
+      console.log(data.preview);
+    };
+
+    document.getElementById('trainForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('models', document.getElementById('models').value);
+      formData.append('target_column', document.getElementById('trainTarget').value);
+      const res = await fetch(`${backend}/train_model`, { method: 'POST', body: formData });
+      const data = await res.json();
+      alert('Training complete. Metrics in console.');
+      console.log(data);
+    };
+
+    document.getElementById('predictForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('file', document.getElementById('testCsv').files[0]);
+      formData.append('model_name', document.getElementById('modelName').value);
+      formData.append('target_column', document.getElementById('predictTarget').value);
+      const res = await fetch(`${backend}/predict`, { method: 'POST', body: formData });
+      const data = await res.json();
+      document.getElementById('result').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+    };
+  </script>
+</body>
+</html>

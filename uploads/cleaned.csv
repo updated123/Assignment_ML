@@ -1,0 +1,11 @@
+CustomerID,SeniorCitizen,Tenure,MonthlyCharges,TotalCharges,Gender_Female,Gender_Male,Partner_No,Partner_Yes,Dependents_No,Dependents_Yes,PhoneService_No,PhoneService_Yes,InternetService_DSL,InternetService_Fiber optic,InternetService_No,Contract_Month-to-month,Contract_One year,Contract_Two year,Churn_No,Churn_Yes
+0.0,0.0,0.3142857142857143,0.7894736842105263,0.47904191616766467,False,True,False,True,True,False,False,True,False,True,False,True,False,False,False,True
+0.11111111111111427,1.0,0.0,0.0,0.0,True,False,True,False,True,False,True,False,False,False,True,True,False,False,True,False
+0.22222222222222854,0.0,0.9999999999999999,0.4789473684210527,1.0,False,True,False,True,False,True,False,True,True,False,False,False,False,True,True,False
+0.3333333333333286,0.0,0.14285714285714285,0.6921052631578948,0.2115055603079555,True,False,False,True,True,False,False,True,False,True,False,False,True,False,False,True
+0.44444444444444287,1.0,0.08571428571428572,0.5294736842105263,0.11171941830624464,False,True,True,False,True,False,False,True,True,False,False,True,False,False,False,True
+0.5555555555555571,0.0,0.48571428571428565,0.3710526315789474,0.4168092386655261,True,False,True,False,False,True,False,True,True,False,False,False,True,False,True,False
+0.6666666666666714,1.0,0.5428571428571428,1.0,0.9751924721984602,False,True,False,True,False,True,False,True,False,True,False,False,False,True,True,False
+0.7777777777777715,0.0,0.2571428571428571,0.2631578947368421,0.18391787852865696,True,False,False,True,True,False,False,True,False,False,True,False,True,False,True,False
+0.8888888888888857,1.0,0.02857142857142857,0.7378947368421052,0.06852010265183917,False,True,True,False,True,False,False,True,False,True,False,True,False,False,False,True
+1.0,0.0,0.6,0.42105263157894735,0.5560307955517536,True,False,False,True,False,True,False,True,True,False,False,False,False,True,True,False
