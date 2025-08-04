@@ -65,12 +65,30 @@ async def train_models(
     
     # ✅ Return results as JSON
     return results
-
 @app.post("/predict")
-def predict(file: UploadFile = File(...), model_name: str = Form(...), target_column: str = Form(...)):
+def predict(
+    file: UploadFile = File(...),
+    model_name: str = Form(...),
+    target_column: str = Form(...)
+):
     test_df = pd.read_csv(file.file)
     test_df.to_csv(f"{UPLOAD_DIR}/test.csv", index=False)
-    pred_df = model_utils.predict(test_df, model_name)
-    explanations = llm_utils.explain_batch(pred_df, target_column)
+
+    # Drop target column if present (should not be in test features)
+    if target_column in test_df.columns:
+        test_df = test_df.drop(columns=[target_column])
+
+    preds = model_utils.predict(test_df, model_name)
+
+    if isinstance(preds, pd.DataFrame):
+        preds = preds.iloc[:, 0]
+
+    pred_df = test_df.copy()
+    pred_df["prediction"] = preds
+
+    # ✅ Pass target_column to exclude it in explanations
+    explanations = llm_utils.explain_batch(test_df, model_name, target_column)
+
     pred_df["Explanation"] = explanations
+
     return pred_df.to_dict(orient="records")
