@@ -19,7 +19,6 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 def train(df, model_list, target):
     print(model_list)
     X = df.drop(columns=[target])
-    X = df.drop(column=['Churn_No'])
     y = df[target]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
